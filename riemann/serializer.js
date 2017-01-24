@@ -10,7 +10,7 @@ if (!riemannSchema) {
   var protobuf  = require('protobufjs');
   var readFile  = require('fs').readFileSync;
 
-  var proto = protobuf.loadSync('./riemann/proto/proto.proto');
+  var proto = protobuf.loadSync(__dirname+'/proto/proto.proto');
 
   eventSchema = proto.lookup('Event');
   msgSchema = proto.lookup('Msg');

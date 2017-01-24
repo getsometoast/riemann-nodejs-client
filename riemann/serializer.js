@@ -1,18 +1,56 @@
 /* initialize our protobuf schema,
    and cache it in memory. */
 var riemannSchema;
+var eventSchema;
+var msgSchema;
+var querySchema;
+var stateSchema;
+
 if (!riemannSchema) {
-  var Schema    = require('node-protobuf');
+  var protobuf  = require('protobufjs');
   var readFile  = require('fs').readFileSync;
-  riemannSchema = new Schema(readFile(__dirname+'/proto/proto.desc'));
+
+  var proto = protobuf.loadSync('./riemann/proto/proto.proto');
+
+  eventSchema = proto.lookup('Event');
+  msgSchema = proto.lookup('Msg');
+  querySchema = proto.lookup('Query');
+  stateSchema = proto.lookup('State');
+
+  var schemaMapping = {
+    'Event': eventSchema,
+    'Msg': msgSchema,
+    'Query': querySchema,
+    'State': stateSchema
+  };
+
+  var getSchema = function (type) {
+    return schemaMapping[type];
+  };
+
+  riemannSchema = {
+    serialize: function (type, value) {
+      var serialized;
+      try {
+        serialized = getSchema(type).encode(value).finish();
+      }
+      catch (e) {
+        console.log(e);
+      }
+      return serialized;
+    },
+    parse: function (type, value) {
+      return getSchema(type).decode(value);
+    }
+  };
 }
 
 function _serialize(type, value) {
-  return riemannSchema.serialize(value, type);
+  return riemannSchema.serialize(type, value);
 }
 
 function _deserialize(type, value) {
-  return riemannSchema.parse(value, type);
+  return riemannSchema.parse(type, value);
 }
 
 /* serialization support for all

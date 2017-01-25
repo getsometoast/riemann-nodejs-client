@@ -1,5 +1,3 @@
-/* initialize our protobuf schema,
-   and cache it in memory. */
 var riemannSchema;
 var eventSchema;
 var msgSchema;
@@ -30,16 +28,22 @@ if (!riemannSchema) {
 
   riemannSchema = {
     serialize: function (type, value) {
+      console.info('RIEMANN CLIENT, serializing type: ', type);
+      console.info('RIEMANN CLIENT, serializing value: ', value);
       var serialized;
       try {
         serialized = getSchema(type).encode(value).finish();
       }
       catch (e) {
-        console.log(e);
+        console.error(e);
       }
+
+      console.info('RIEMANN CLIENT, successfully serlialized to buffer: ', serlialized);
       return serialized;
     },
     parse: function (type, value) {
+      console.info('RIEMANN CLIENT, deserializing type: ', type);
+      console.info('RIEMANN CLIENT, deserializing value: ', value);
       return getSchema(type).decode(value);
     }
   };
@@ -52,9 +56,6 @@ function _serialize(type, value) {
 function _deserialize(type, value) {
   return riemannSchema.parse(type, value);
 }
-
-/* serialization support for all
-   known Riemann protobuf types. */
 
 exports.serializeEvent = function(event) {
   return _serialize('Event', event);

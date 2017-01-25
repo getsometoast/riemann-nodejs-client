@@ -1,3 +1,7 @@
+# Riemann Node.js Client (protobufjs)
+This is a forked version of the [node riemann client](https://github.com/perezd/riemann-nodejs-client) that uses [protobufjs](https://github.com/dcodeIO/protobuf.js) instaed of the the [javascript protobuf wrapper](https://github.com/fuwaneko/node-protobuf) to serialize messages sent to riemann.  This was done so that we could deploy webhook handlers to [AWS Lambda](https://aws.amazon.com/lambda/) that could send messages to riemann without having to rely on the protobuf binaries.
+
+#### Original README:
 # [Riemann](http://aphyr.github.com/riemann/) Node.js Client
 
 because you should be monitoring all of those [non-blocking buffet plates.](http://www.infinitelooper.com/?v=-sfZqL4Plxc&p=n#/242;267)

@@ -38,7 +38,7 @@ if (!riemannSchema) {
         console.error(e);
       }
 
-      console.info('RIEMANN CLIENT, successfully serlialized to buffer: ', serlialized);
+      console.info('RIEMANN CLIENT, successfully serlialized to buffer: ', serialized);
       return serialized;
     },
     parse: function (type, value) {
